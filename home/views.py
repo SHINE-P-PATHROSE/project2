@@ -1,35 +1,39 @@
 from django.shortcuts import render,redirect
-from django.contrib.auth.models import User
-
+from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.http import HttpResponse
 def home (request):
     return render(request, 'home.html')
 
-def form (request):
-        if request.method == "POST":
-            fname = request.POST['fname']
-            lname = request.POST['lname']
-            username = request.POST['username']
-            email= request.POST['email']
-            pass1= request.POST['pass1']
-            pass2 = request.POST['pass2']
+def form(request):
+    if request.method == "POST":
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        username = request.POST['username']
+        email = request.POST['email']
+        pass1 = request.POST['pass1']
+        pass2 = request.POST['pass2']
 
+        if pass1 == pass2:
             # Check if the username or email already exists
             if User.objects.filter(username=username).exists():
-                print("User not created: Username already exists")
-                return HttpResponse("Username already exists.")
+                messages.info(request, 'Username taken')
+                return redirect("form")
             elif User.objects.filter(email=email).exists():
-                print("User not created: Email already exists")
-                return HttpResponse("Email already exists.")
+                messages.info(request, 'Email taken')
+                return redirect("form")
             else:
                 # Create and save the user if the conditions are met
                 user = User.objects.create_user(username=username, password=pass1, email=email, first_name=fname, last_name=lname)
                 user.save()
                 print("User created")
                 return redirect('/')
-        return render(request,'form.html')
-
+        else:
+            print('Password not matched')
+            messages.info(request, 'Password not matched')
+            return redirect('form')
+    else:
+        return render(request, 'form.html')
 
 
 def login (request):
@@ -47,3 +51,9 @@ def login (request):
             return redirect("login")
     else:
         return render(request,"login.html")
+
+
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')

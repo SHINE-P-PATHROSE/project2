@@ -7,29 +7,19 @@
     <title>new project</title>
   </head>
   <body>
- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">login</a>
-        </li>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a> </li>
+        {% if user.is_authenticated %}
+      <li>Welcome, <span class="username">  {{ user.username }} </span> </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">sign up</a>
-        </li>
-             <li class="nav-item">
-          <a class="nav-link" href="#">logout</a>
-        </li>
-
-      </ul>
-    </div>
-  </div>
-</nav>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+      <li><a href="{% url 'form' %}">form</a></li>
+      <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+  </ul>
+  </nav>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </body>
 </html>
